@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Molly's 2026 Career Wrapped</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 100%; height: 100%;
+      overflow: hidden;
+      font-family: 'Inter', sans-serif;
+      background: #000;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Progress bar ── */
+    #progress-track {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: rgba(255,255,255,0.15);
+      z-index: 200;
+    }
+    #progress-fill {
+      height: 100%;
+      background: rgba(255,255,255,0.7);
+      transition: width 0.5s ease;
+    }
+
+    /* ── Dot navigation ── */
+    #dots {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 7px;
+      z-index: 200;
+      align-items: center;
+    }
+    .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.25);
+      cursor: pointer;
+      transition: all 0.35s ease;
+      flex-shrink: 0;
+    }
+    .dot.active {
+      width: 22px;
+      border-radius: 3px;
+      background: rgba(255,255,255,0.9);
+    }
+
+    /* ── Arrow nav ── */
+    .nav-btn {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.7);
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 16px;
+      z-index: 200;
+      transition: background 0.2s, opacity 0.3s;
+      display: flex; align-items: center; justify-content: center;
+      backdrop-filter: blur(8px);
+    }
+    #nav-prev { left: 20px; }
+    #nav-next { right: 20px; }
+    .nav-btn:hover { background: rgba(255,255,255,0.18); }
+    .nav-btn:disabled { opacity: 0.2; cursor: default; }
+
+    /* ── Click hint ── */
+    #hint {
+      position: fixed;
+      bottom: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgba(255,255,255,0.35);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      z-index: 200;
+      transition: opacity 0.8s ease;
+      white-space: nowrap;
+    }
+
+    /* ── Slide wrapper ── */
+    #stage {
+      position: fixed;
+      inset: 0;
+    }
+
+    /* ── Individual slide ── */
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 60px 48px 80px;
+      text-align: center;
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(0.97);
+      transition: opacity 0.45s ease, transform 0.45s ease;
+      overflow: hidden;
+    }
+    .slide.active {
+      opacity: 1;
+      pointer-events: all;
+      transform: scale(1);
+    }
+
+    /* ── Animated elements ── */
+    .a {
+      opacity: 0;
+      transform: translateY(22px);
+    }
+    .a.in {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+
+    /* ── Slide gradient backgrounds ── */
+    .s0  { background: linear-gradient(150deg, #060d1a 0%, #0f2140 50%, #060d1a 100%); }
+    .s1  { background: linear-gradient(135deg, #2d0057 0%, #5b21b6 55%, #2d0057 100%); }
+    .s2  { background: linear-gradient(135deg, #052e1c 0%, #059669 55%, #065f46 100%); }
+    .s3  { background: linear-gradient(135deg, #0c2340 0%, #1493ff 60%, #0366cc 100%); }
+    .s4  { background: linear-gradient(135deg, #422006 0%, #d97706 55%, #92400e 100%); }
+    .s5  { background: linear-gradient(135deg, #500724 0%, #db2777 55%, #831843 100%); }
+    .s6  { background: linear-gradient(135deg, #1e1b4b 0%, #4f46e5 55%, #312e81 100%); }
+    .s7  { background: linear-gradient(135deg, #451a03 0%, #f59e0b 55%, #78350f 100%); }
+    .s8  { background: linear-gradient(135deg, #022c22 0%, #10b981 55%, #064e3b 100%); }
+    .s9  { background: linear-gradient(135deg, #0c1a40 0%, #0284c7 55%, #075985 100%); }
+    .s10 { background: linear-gradient(135deg, #1e0a4a 0%, #7c3aed 55%, #4c1d95 100%); }
+    .s11 { background: linear-gradient(150deg, #060d1a 0%, #1f375b 50%, #060d1a 100%); }
+    .s12 { background: linear-gradient(150deg, #0a0a1a 0%, #1f375b 50%, #0a0a1a 100%); }
+    .s13 { background: linear-gradient(150deg, #060d1a 0%, #0f2140 40%, #0a1628 100%); }
+
+    /* ── Decorative background number ── */
+    .bg-num {
+      position: absolute;
+      font-size: clamp(12rem, 45vw, 28rem);
+      font-weight: 900;
+      color: rgba(255,255,255,0.04);
+      pointer-events: none;
+      user-select: none;
+      letter-spacing: -0.05em;
+      line-height: 1;
+      z-index: 0;
+    }
+
+    /* ── Decorative orb ── */
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      filter: blur(80px);
+      opacity: 0.18;
+      z-index: 0;
+    }
+
+    /* ── All content above decorations ── */
+    .slide > * { position: relative; z-index: 1; }
+
+    /* ── Typography ── */
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+    }
+    .headline {
+      font-size: clamp(2.6rem, 7.5vw, 6rem);
+      font-weight: 900;
+      line-height: 1.03;
+      color: #fff;
+      letter-spacing: -0.025em;
+    }
+    .headline-xl {
+      font-size: clamp(6rem, 22vw, 16rem);
+      font-weight: 900;
+      line-height: 1;
+      color: #fff;
+      letter-spacing: -0.04em;
+    }
+    .subhead {
+      font-size: clamp(1rem, 2.4vw, 1.4rem);
+      font-weight: 500;
+      color: rgba(255,255,255,0.78);
+      line-height: 1.55;
+      max-width: 580px;
+    }
+    .body-sm {
+      font-size: clamp(0.85rem, 1.8vw, 1rem);
+      font-weight: 400;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.65;
+      max-width: 540px;
+    }
+    .label {
+      font-size: 11px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.35);
+      letter-spacing: 0.08em;
+    }
+
+    /* Accent colours */
+    .c-blue   { color: #60a5fa; }
+    .c-teal   { color: #34d399; }
+    .c-yellow { color: #fcd34d; }
+    .c-pink   { color: #f9a8d4; }
+    .c-orange { color: #fdba74; }
+    .c-purple { color: #c4b5fd; }
+    .c-sky    { color: #7dd3fc; }
+
+    /* ── Stats grid ── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      width: 100%;
+      max-width: 520px;
+    }
+    .stat-card {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 18px;
+      padding: 22px 16px;
+      text-align: center;
+      backdrop-filter: blur(6px);
+    }
+    .stat-n {
+      font-size: clamp(2.2rem, 6vw, 3.2rem);
+      font-weight: 900;
+      color: #fff;
+      line-height: 1;
+    }
+    .stat-l {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.55);
+      margin-top: 6px;
+      font-weight: 500;
+      line-height: 1.35;
+    }
+
+    /* ── Tag/badge ── */
+    .tag {
+      display: inline-block;
+      padding: 8px 20px;
+      border-radius: 100px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.18);
+      color: rgba(255,255,255,0.9);
+      letter-spacing: 0.03em;
+    }
+
+    /* ── Project list ── */
+    .project-list {
+      width: 100%;
+      max-width: 520px;
+      text-align: left;
+    }
+    .project-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .project-item:last-child { border-bottom: none; }
+    .pi-icon {
+      font-size: 1.3rem;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .pi-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.3;
+    }
+    .pi-desc {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.55);
+      margin-top: 3px;
+      line-height: 1.45;
+    }
+
+    /* ── Growth cards ── */
+    .growth-list {
+      width: 100%;
+      max-width: 520px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      text-align: left;
+    }
+    .growth-card {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 14px;
+      padding: 16px 18px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+    .gc-icon { font-size: 1.4rem; flex-shrink: 0; }
+    .gc-body { font-size: 0.88rem; color: rgba(255,255,255,0.8); line-height: 1.5; }
+    .gc-body strong { color: #fff; font-weight: 700; }
+
+    /* ── OKR pills ── */
+    .okr-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      max-width: 520px;
+    }
+    .okr-pill {
+      padding: 11px 22px;
+      border-radius: 100px;
+      font-weight: 700;
+      font-size: 0.82rem;
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    /* ── Cover star particles ── */
+    .stars {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .star {
+      position: absolute;
+      width: 2px; height: 2px;
+      border-radius: 50%;
+      background: #fff;
+      animation: twinkle var(--d, 3s) ease-in-out infinite var(--delay, 0s);
+      opacity: 0;
+    }
+    @keyframes twinkle {
+      0%, 100% { opacity: 0; }
+      50% { opacity: var(--op, 0.6); }
+    }
+
+    /* ── Glow pulse on closing headline ── */
+    @keyframes glow-pulse {
+      0%, 100% { text-shadow: 0 0 30px rgba(20,147,255,0.3); }
+      50% { text-shadow: 0 0 70px rgba(20,147,255,0.6), 0 0 120px rgba(20,147,255,0.2); }
+    }
+    .glow { animation: glow-pulse 2.8s ease-in-out infinite; }
+
+    /* ── Spacers ── */
+    .mt-8  { margin-top: 8px; }
+    .mt-12 { margin-top: 12px; }
+    .mt-16 { margin-top: 16px; }
+    .mt-20 { margin-top: 20px; }
+    .mt-24 { margin-top: 24px; }
+    .mt-28 { margin-top: 28px; }
+    .mt-32 { margin-top: 32px; }
+    .mt-40 { margin-top: 40px; }
+    .mt-48 { margin-top: 48px; }
+
+    /* ── Responsive ── */
+    @media (max-width: 560px) {
+      .slide { padding: 56px 24px 72px; }
+      .nav-btn { display: none; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="progress-track"><div id="progress-fill"></div></div>
+<div id="dots"></div>
+<div id="hint">Click anywhere or press → to continue</div>
+
+<button class="nav-btn" id="nav-prev" onclick="go(-1)" aria-label="Previous">&#8592;</button>
+<button class="nav-btn" id="nav-next" onclick="go(1)" aria-label="Next">&#8594;</button>
+
+<div id="stage">
+
+  <!-- ══ 0: Cover ══ -->
+  <div class="slide s0" id="s0">
+    <div class="stars" id="stars-cover"></div>
+    <div class="orb" style="width:500px;height:500px;background:#1493ff;top:-100px;left:-100px;"></div>
+    <div class="orb" style="width:400px;height:400px;background:#7c3aed;bottom:-80px;right:-80px;"></div>
+
+    <p class="a eyebrow mt-0">FanDuel · 90-Day Review</p>
+    <h1 class="a headline mt-16" style="font-size:clamp(3rem,10vw,8rem)">
+      Your first<br><span class="c-blue">90 days.</span>
+    </h1>
+    <p class="a subhead mt-20">
+      Molly Stass<br>
+      <span style="color:rgba(255,255,255,0.4);font-size:0.8em;font-weight:400">Content Designer, Account InLife &amp; RG</span>
+    </p>
+    <p class="a label mt-48">January – April 2026</p>
+  </div>
+
+  <!-- ══ 1: Stats overview ══ -->
+  <div class="slide s1" id="s1">
+    <div class="bg-num">26</div>
+    <div class="orb" style="width:600px;height:600px;background:#7c3aed;top:-200px;right:-200px;"></div>
+
+    <p class="a eyebrow">90 days · What you built</p>
+    <h2 class="a headline mt-16">
+      You didn't ease in.<br>You <span class="c-purple">showed up.</span>
+    </h2>
+    <div class="a stats-grid mt-36" style="margin-top:36px">
+      <div class="stat-card">
+        <div class="stat-n">6</div>
+        <div class="stat-l">projects &amp; initiatives delivered</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-n">15</div>
+        <div class="stat-l">cross-functional 1:1s</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-n">30+</div>
+        <div class="stat-l">error patterns shipped</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-n">4</div>
+        <div class="stat-l">OKRs supported</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ 2: January intro ══ -->
+  <div class="slide s2" id="s2">
+    <div class="orb" style="width:500px;height:500px;background:#059669;bottom:-150px;right:-100px;"></div>
+
+    <p class="a eyebrow">Month 1 · January</p>
+    <h2 class="a headline mt-16">
+      From day one,<br>you were already<br><span class="c-teal">building.</span>
+    </h2>
+    <div class="a project-list mt-32" style="margin-top:32px">
+      <div class="project-item">
+        <span class="pi-icon">🎨</span>
+        <div>
+          <div class="pi-title">Passkeys email &amp; pop-up content</div>
+          <div class="pi-desc">End-to-end strategy for a new auth technology across multiple surfaces</div>
+        </div>
+      </div>
+      <div class="project-item">
+        <span class="pi-icon">🛠️</span>
+        <div>
+          <div class="pi-title">Career diary automation</div>
+          <div class="pi-desc">Built an AI workflow — then documented and shared it with the whole UXDC team</div>
+        </div>
+      </div>
+      <div class="project-item">
+        <span class="pi-icon">⭐️</span>
+        <div>
+          <div class="pi-title">CFX relationship building</div>
+          <div class="pi-desc">Systematically built cross-functional partnerships from scratch</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ 3: Passkeys ══ -->
+  <div class="slide s3" id="s3">
+    <div class="orb" style="width:600px;height:600px;background:#1493ff;top:-200px;left:-150px;"></div>
+
+    <p class="a eyebrow">Week 3 · First major project</p>
+    <h2 class="a headline mt-16" style="font-size:clamp(2.2rem,6vw,4.8rem)">
+      New to the team.<br>Already shaping<br><span class="c-sky">product strategy.</span>
+    </h2>
+    <p class="a subhead mt-24">
+      Passkeys — a full content strategy spanning onboarding emails, in-app pop-ups, and security notifications, for a brand new auth technology.
+    </p>
+    <p class="a body-sm mt-16">
+      Two distinct content modes in one workstream: proactive onboarding <em>and</em> transactional security notifications. Part of an auth migration affecting a significant portion of the user base.
+    </p>
+    <p class="a tag mt-28">Proactive content design thinking from week 3</p>
+  </div>
+
+  <!-- ══ 4: Career diary tool ══ -->
+  <div class="slide s4" id="s4">
+    <div class="orb" style="width:500px;height:500px;background:#d97706;bottom:-150px;right:-100px;"></div>
+
+    <p class="a eyebrow">January · Internal tooling</p>
+    <h2 class="a headline mt-16">
+      You built it<br>for yourself.<br>Then <span class="c-orange">shared it.</span>
+    </h2>
+    <p class="a subhead mt-24">
+      The career diary automation you created didn't stay on your machine. You documented the full process and handed it to the entire UXDC team.
+    </p>
+    <p class="a body-sm mt-16">
+      Manual career tracking is high-friction — you removed the barrier for everyone, not just yourself.
+    </p>
+    <p class="a tag mt-28">That's L4 team contribution.</p>
+  </div>
+
+  <!-- ══ 5: 15 conversations ══ -->
+  <div class="slide s5" id="s5">
+    <div class="orb" style="width:600px;height:600px;background:#db2777;top:-200px;right:-200px;"></div>
+
+    <p class="a eyebrow">Month 1 · Relationship building</p>
+    <div class="a headline-xl mt-8 c-pink" style="margin-top:8px">15</div>
+    <h2 class="a headline mt-8" style="font-size:clamp(1.6rem,4.5vw,3.2rem)">
+      cross-functional<br>conversations.
+    </h2>
+    <p class="a subhead mt-20">
+      Before January was over. Most new joiners spend month 1 learning the ropes — you spent it systematically building relationships across UXDC, product, UXR, and analytics.
+    </p>
+  </div>
+
+  <!-- ══ 6: February intro ══ -->
+  <div class="slide s6" id="s6">
+    <div class="orb" style="width:500px;height:500px;background:#4f46e5;top:-150px;right:-100px;"></div>
+
+    <p class="a eyebrow">Month 2 · February</p>
+    <h2 class="a headline mt-16">
+      By month 2,<br>delivering<br><span class="c-purple">at scale.</span>
+    </h2>
+    <div class="a project-list mt-32" style="margin-top:32px">
+      <div class="project-item">
+        <span class="pi-icon">🎨</span>
+        <div>
+          <div class="pi-title">NDBS Client Error Content</div>
+          <div class="pi-desc">30+ geolocation error patterns for Casino web (Canada) — a reusable framework, not one-off copy</div>
+        </div>
+      </div>
+      <div class="project-item">
+        <span class="pi-icon">🎨</span>
+        <div>
+          <div class="pi-title">Deposit Limit Progress Transparency</div>
+          <div class="pi-desc">Content strategy for real-time deposit limit visibility during the deposit flow — informing without alarming, promoting self-management without adding friction</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ 7: 30+ stat ══ -->
+  <div class="slide s7" id="s7">
+    <div class="bg-num">30</div>
+    <div class="orb" style="width:600px;height:600px;background:#f59e0b;bottom:-200px;left:-150px;"></div>
+
+    <p class="a eyebrow">Month 2 · February</p>
+    <div class="a headline-xl mt-8 c-yellow" style="margin-top:8px">30+</div>
+    <h2 class="a headline mt-8" style="font-size:clamp(1.6rem,4.5vw,3.2rem)">
+      error message<br>patterns. Signed off.
+    </h2>
+    <p class="a subhead mt-20">
+      Not filling in blanks — establishing a scalable content framework for one of the highest-friction moments in the Casino experience. In month two.
+    </p>
+    <p class="a tag mt-24">Scope &amp; complexity, fast</p>
+  </div>
+
+  <!-- ══ 8: March intro ══ -->
+  <div class="slide s8" id="s8">
+    <div class="orb" style="width:500px;height:500px;background:#10b981;top:-150px;right:-100px;"></div>
+
+    <p class="a eyebrow">Month 3 · March</p>
+    <h2 class="a headline mt-16">
+      By month 3,<br>you were<br><span class="c-teal">leading the room.</span>
+    </h2>
+    <p class="a subhead mt-24">
+      RG Content Touchpoint Exploration — mapped 5+ end-to-end user journeys, analysed performance data, built the deck.
+    </p>
+    <p class="a body-sm mt-16">
+      And on March 20, you facilitated the cross-squad prioritization workshop. Shared findings with both the RG squad and CPE Product team.
+    </p>
+  </div>
+
+  <!-- ══ 9: Workshop stats ══ -->
+  <div class="slide s9" id="s9">
+    <div class="orb" style="width:600px;height:600px;background:#0284c7;top:-200px;left:-150px;"></div>
+
+    <p class="a eyebrow">March · Workshop</p>
+    <h2 class="a headline mt-16" style="font-size:clamp(2rem,6vw,5rem)">
+      You didn't just<br>find the gaps.
+    </h2>
+    <p class="a subhead mt-24">
+      You brought both squads together to decide what to do about them.
+    </p>
+    <div class="a stats-grid mt-32" style="margin-top:32px;grid-template-columns:repeat(2,1fr);max-width:400px">
+      <div class="stat-card">
+        <div class="stat-n">5+</div>
+        <div class="stat-l">RG flows audited end-to-end</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-n">2</div>
+        <div class="stat-l">squads aligned in one workshop</div>
+      </div>
+    </div>
+    <p class="a tag mt-24">L4-level strategic initiative</p>
+  </div>
+
+  <!-- ══ 10: April ══ -->
+  <div class="slide s10" id="s10">
+    <div class="orb" style="width:600px;height:600px;background:#7c3aed;bottom:-200px;right:-150px;"></div>
+
+    <p class="a eyebrow">Month 4 · Still accelerating</p>
+    <h2 class="a headline mt-16">
+      And you're still<br><span class="c-purple">raising the bar.</span>
+    </h2>
+    <p class="a subhead mt-24">
+      Unified MFA — consolidating two legacy auth systems: login, 2FA, recognised device states, and account management. The most architecturally complex project yet.
+    </p>
+    <p class="a body-sm mt-16">
+      You didn't wait to be briefed. You reviewed the FigJam, the one-pager, and the existing designs before the first meeting — then drove a dedicated alignment session yourself.
+    </p>
+    <p class="a tag mt-24">That's not onboarding. That's ownership.</p>
+  </div>
+
+  <!-- ══ 11: L3→L4 growth ══ -->
+  <div class="slide s11" id="s11">
+    <div class="orb" style="width:500px;height:500px;background:#1493ff;top:-150px;right:-100px;"></div>
+
+    <p class="a eyebrow">Your 90-day onboarding story</p>
+    <h2 class="a headline mt-16">
+      You went above<br>and beyond<br><span class="c-blue">from day one.</span>
+    </h2>
+    <div class="a growth-list mt-28" style="margin-top:28px">
+      <div class="growth-card">
+        <span class="gc-icon">🚀</span>
+        <div class="gc-body"><strong>Initiative</strong> — Scoped your own RG audit unprompted, built a team-wide career tracking tool, ramped independently on Unified MFA before a single briefing</div>
+      </div>
+      <div class="growth-card">
+        <span class="gc-icon">🌐</span>
+        <div class="gc-body"><strong>Influence</strong> — 15 CFX 1:1s in month one, cross-squad workshop facilitation in month three, tool documentation shared team-wide</div>
+      </div>
+      <div class="growth-card">
+        <span class="gc-icon">🏗️</span>
+        <div class="gc-body"><strong>Scale &amp; complexity</strong> — 30+ reusable error patterns, multi-state auth systems, end-to-end content strategies — all within 90 days</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ 12: OKRs ══ -->
+  <div class="slide s12" id="s12">
+    <div class="orb" style="width:500px;height:500px;background:#1f375b;bottom:-150px;left:-100px;"></div>
+
+    <p class="a eyebrow">Business impact · From day one</p>
+    <h2 class="a headline mt-16">
+      Connected to the<br>business from<br><span class="c-blue">your first week.</span>
+    </h2>
+    <div class="a okr-grid mt-32" style="margin-top:32px">
+      <div class="okr-pill" style="background:rgba(20,147,255,0.2)">KR 1.1 · Customer eligibility</div>
+      <div class="okr-pill" style="background:rgba(124,58,237,0.25)">KR 1.2 · AI tooling adoption</div>
+      <div class="okr-pill" style="background:rgba(16,185,129,0.2)">KR 1.3 · Compliance clarity</div>
+      <div class="okr-pill" style="background:rgba(249,115,22,0.2)">KR 1.4 · Core journey protection</div>
+    </div>
+    <p class="a body-sm mt-28">
+      Auth flows, error patterns, RG content, AI workflows — every piece of work tied to a business outcome, not just a ticket.
+    </p>
+  </div>
+
+  <!-- ══ 13: Closing ══ -->
+  <div class="slide s13" id="s13">
+    <div class="stars" id="stars-close"></div>
+    <div class="orb" style="width:600px;height:600px;background:#1493ff;top:-200px;left:-150px;"></div>
+    <div class="orb" style="width:400px;height:400px;background:#7c3aed;bottom:-100px;right:-100px;"></div>
+
+    <p class="a eyebrow">90 days in</p>
+    <h2 class="a headline glow mt-16" style="font-size:clamp(3.5rem,11vw,9rem)">
+      The foundation<br>is <span class="c-blue">set.</span>
+    </h2>
+    <p class="a subhead mt-32">
+      You onboarded. You built relationships. You shipped real work. And you have the evidence to back it up.
+    </p>
+    <p class="a label mt-48">90-day review · April 2026 · FanDuel</p>
+  </div>
+
+</div><!-- /stage -->
+
+<script>
+  const TOTAL = 14;
+  let cur = 0;
+
+  /* ── Build star fields ── */
+  function buildStars(containerId, count) {
+    const el = document.getElementById(containerId);
+    if (!el) return;
+    for (let i = 0; i < count; i++) {
+      const s = document.createElement('div');
+      s.className = 'star';
+      s.style.cssText = `
+        left:${Math.random()*100}%;
+        top:${Math.random()*100}%;
+        --d:${2+Math.random()*4}s;
+        --delay:${Math.random()*4}s;
+        --op:${0.3+Math.random()*0.5};
+        width:${1+Math.random()*2}px;
+        height:${1+Math.random()*2}px;
+      `;
+      el.appendChild(s);
+    }
+  }
+  buildStars('stars-cover', 80);
+  buildStars('stars-close', 80);
+
+  /* ── Build dot nav ── */
+  const dotsEl = document.getElementById('dots');
+  for (let i = 0; i < TOTAL; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot';
+    d.setAttribute('aria-label', `Slide ${i+1}`);
+    d.addEventListener('click', () => goTo(i));
+    dotsEl.appendChild(d);
+  }
+
+  /* ── Core navigation ── */
+  function goTo(n) {
+    if (n < 0 || n >= TOTAL) return;
+
+    // Deactivate old slide + reset its animated children
+    const old = document.getElementById(`s${cur}`);
+    old.classList.remove('active');
+    old.querySelectorAll('.a').forEach(el => {
+      el.classList.remove('in');
+      el.style.transitionDelay = '';
+    });
+
+    cur = n;
+    const slide = document.getElementById(`s${cur}`);
+    slide.classList.add('active');
+
+    // Stagger animate children in
+    slide.querySelectorAll('.a').forEach((el, i) => {
+      // Small forced reflow to reset transition
+      void el.offsetWidth;
+      el.style.transitionDelay = `${80 + i * 130}ms`;
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => el.classList.add('in'));
+      });
+    });
+
+    // Progress bar
+    document.getElementById('progress-fill').style.width =
+      `${((cur + 1) / TOTAL) * 100}%`;
+
+    // Dots
+    document.querySelectorAll('.dot').forEach((d, i) =>
+      d.classList.toggle('active', i === cur));
+
+    // Buttons
+    document.getElementById('nav-prev').disabled = cur === 0;
+    document.getElementById('nav-next').disabled = cur === TOTAL - 1;
+
+    // Hint
+    if (cur > 0) document.getElementById('hint').style.opacity = '0';
+  }
+
+  function go(dir) { goTo(cur + dir); }
+
+  /* ── Keyboard ── */
+  document.addEventListener('keydown', e => {
+    if (['ArrowRight','ArrowDown','Space',' '].includes(e.key)) { e.preventDefault(); go(1); }
+    if (['ArrowLeft','ArrowUp'].includes(e.key)) { e.preventDefault(); go(-1); }
+  });
+
+  /* ── Touch / swipe ── */
+  let tx = 0;
+  document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend', e => {
+    const dx = tx - e.changedTouches[0].clientX;
+    if (Math.abs(dx) > 50) go(dx > 0 ? 1 : -1);
+  });
+
+  /* ── Click stage to advance ── */
+  document.getElementById('stage').addEventListener('click', e => {
+    if (e.target.closest('.nav-btn, #dots')) return;
+    go(1);
+  });
+
+  /* ── Fade hint after 5s ── */
+  setTimeout(() => { document.getElementById('hint').style.opacity = '0'; }, 5000);
+
+  /* ── Init ── */
+  goTo(0);
+</script>
+
+</body>
+</html>
