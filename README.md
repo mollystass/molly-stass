@@ -33,7 +33,7 @@ I sit at the intersection of language, logic, and user experience — turning co
 
 ## 📬 Find me
 
-- 💼 [LinkedIn](https://linkedin.com/in/mollystassfort) ← *update if needed*
+- 💼 [LinkedIn](https://linkedin.com/in/mollystassfort)
 - 📧 molly.stassfort@fanduel.com
 
 ---
