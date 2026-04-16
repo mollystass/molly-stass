@@ -2,7 +2,7 @@
 
 > *I write the words that stand between a confused user and a really bad decision.*
 
-I'm a **Content Designer** at [FanDuel](https://www.fanduel.com) on CPE focusing on **Account InLife & Responsible Gaming** — which means I spend a lot of time thinking carefully about some of the highest-stakes copy in the product. The kind where tone, word choice, and a well-placed comma actually matter.
+I'm a **Content Designer** at FanDuel on CPE focusing on **Account InLife & Responsible Gaming** — which means I spend a lot of time thinking carefully about some of the highest-stakes copy in the product. The kind where tone, word choice, and a well-placed comma actually matter.
 
 When I'm not writing, I'm usually advocating for why content *is* design, not a step that happens after it.
 
