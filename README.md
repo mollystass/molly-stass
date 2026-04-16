@@ -1,33 +1,47 @@
 # Hey, I'm Molly 👋
 
-> *Words that work. Copy that clicks. Content that actually makes sense.*
+> *I write the words that stand between a confused user and a really bad decision.*
 
-I'm a **UX Content Designer** on CPE at FanDuel, where I help make responsible gaming and account usage feel less like reading the fine print and more like talking to a friend who actually knows what they're doing.
+I'm a **Content Designer** at [FanDuel](https://www.fanduel.com) on CPE focusing on **Account InLife & Responsible Gaming** — which means I spend a lot of time thinking carefully about some of the highest-stakes copy in the product. The kind where tone, word choice, and a well-placed comma actually matter.
 
-I sit at the intersection of language, logic, and user experience — turning complex flows into clear, conversational copy that guides people without making them think too hard.
-
----
-
-## 🛠️ What I work with
-
-**Content & Design**
-- UX writing · Microcopy · Error messages that don't make you want to cry
-- Content strategy · Information architecture · Voice & tone guidelines
-- Design systems content · Account flows · RG messaging
-
-**Tools**
-- Figma · FigJam
-- Confluence · Jira
-- Github · Claude
-- Slack (professionally, chaotically)
+When I'm not writing, I'm usually advocating for why content *is* design, not a step that happens after it.
 
 ---
 
-## 🚧 Currently focused on
+## 🛠️ What I work on
 
-- Sharpening FanDuel's content design practice and raising the bar on in-product copy
-- Exploring how AI tools can support (not replace 👀) content design workflows
-- Advocating for words as a design material — not an afterthought
+**The domains I live in:**
+- Authentication flows — login, passkeys, MFA, OTP, recognized devices
+- Responsible Gambling — suitability checks, self-exclusion, limits, reactivation
+- Account management — deposits, closures, recovery, retention moments
+- Compliance-sensitive copy that has to be warm, honest, and legally airtight all at once
+
+**The craft:**
+- UX writing · Microcopy · Error states · Empty states
+- Content systems (not just copy — end-to-end voice across a full feature)
+- Information architecture · Content strategy → roadmap influence
+- Cross-functional content reviews with legal, engineering, and product
+
+**The tools:**
+- Figma · FigJam · Confluence · Jira
+- Claude (and building skills/tools on top of it 👇)
+
+---
+
+## 🤖 Building with AI
+
+I'm building FanDuel's **UX Content Companion** — a structured Claude skill that generates contextual content feedback and drops it directly into Figma. What started as a personal efficiency tool turned into something I shared with our AI Champions program to scale across the broader design team.
+
+I'm actively exploring how AI can support content design workflows without replacing the judgment that makes copy actually work.
+
+---
+
+## 🚧 What I've shipped recently
+
+- **Passkeys (end-to-end)** — Built the full content suite from scratch: onboarding, education, error handling, deletion, and email. Shipped to iOS Clubhouse. One coherent voice across ~6 tickets over 3 months.
+- **Deposit limit transparency** — Phase 2 content for helping users understand where they stand against their deposit limits in real time. The kind of feature where clarity isn't just good UX — it's responsible design. 
+- **RG touchpoint audit** — Deep-dived FanDuel's responsible gambling touchpoints, surfaced terminology inconsistencies, and turned the findings into a scoped Jira backlog. The readout is now being used as a living reference in product planning conversations.
+- **Unified MFA** — In progress. Consolidating two legacy auth systems into one. Architecturally complex, content-first problem.
 
 ---
 
@@ -38,4 +52,4 @@ I sit at the intersection of language, logic, and user experience — turning co
 
 ---
 
-*Made with caffeine and strong opinions about button labels.*
+*L3 Content Designer working toward L4. Strong opinions about button labels, self-exclusion UX, and whether "alerts" and "limits" are actually the same thing (they're not).*
