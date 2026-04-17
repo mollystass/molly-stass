@@ -38,8 +38,8 @@ I'm actively exploring how AI can support content design workflows without repla
 
 ## 🚧 What I've shipped recently
 
-- **Passkeys (end-to-end)** — Built the full content suite from scratch: onboarding, education, error handling, deletion, and email. Shipped to iOS Clubhouse. One coherent voice across ~6 tickets over 3 months.
-- **Deposit limit transparency** — Phase 2 content for helping users understand where they stand against their deposit limits in real time. The kind of feature where clarity isn't just good UX — it's responsible design. 
+- **Passkeys (end-to-end)** — Built the full content suite from scratch: onboarding, education, error handling, deletion, and email. One coherent voice across ~6 tickets over 3 months.
+- **Deposit limit transparency** — Content for helping users understand where they stand against their deposit limits in real time. The kind of feature where clarity isn't just good UX — it's responsible design. 
 - **RG touchpoint audit** — Deep-dived FanDuel's responsible gambling touchpoints, surfaced terminology inconsistencies, and turned the findings into a scoped Jira backlog. The readout is now being used as a living reference in product planning conversations.
 - **Unified MFA** — In progress. Consolidating two legacy auth systems into one. Architecturally complex, content-first problem.
 
@@ -52,4 +52,4 @@ I'm actively exploring how AI can support content design workflows without repla
 
 ---
 
-*L3 Content Designer working toward L4. Strong opinions about button labels, self-exclusion UX, and whether "alerts" and "limits" are actually the same thing (they're not).*
+*L3 Content Designer working toward L4. Strong opinions about button labels and risky versus responsible UX.*
