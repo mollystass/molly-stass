@@ -379,6 +379,36 @@
     .mt-40 { margin-top: 40px; }
     .mt-48 { margin-top: 48px; }
 
+    /* ── Hype slide backgrounds ── */
+    .sh1 { background: linear-gradient(135deg, #1a0533 0%, #7c3aed 55%, #1a0533 100%); }
+    .sh2 { background: linear-gradient(135deg, #022c22 0%, #0d9488 55%, #134e4a 100%); }
+    .s15 { background: linear-gradient(150deg, #060d1a 0%, #0f2140 40%, #0a1628 100%); }
+
+    /* ── Screenshot collage ── */
+    .hype-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      justify-content: center;
+      align-items: flex-start;
+      max-width: 620px;
+    }
+    .hype-img {
+      max-height: 155px;
+      max-width: 310px;
+      width: auto;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.55), 0 2px 8px rgba(0,0,0,0.3);
+      transform: rotate(var(--rot, 0deg));
+      border: 3px solid rgba(255,255,255,0.12);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .hype-img:hover {
+      transform: rotate(0deg) scale(1.04);
+      box-shadow: 0 16px 56px rgba(0,0,0,0.65);
+    }
+
     /* ── Responsive ── */
     @media (max-width: 560px) {
       .slide { padding: 56px 24px 72px; }
@@ -667,8 +697,34 @@
     </p>
   </div>
 
-  <!-- ══ 13: Closing ══ -->
-  <div class="slide s13" id="s13">
+  <!-- ══ 13: Hype & kudos — early recognition ══ -->
+  <div class="slide sh1" id="s13">
+    <div class="orb" style="width:500px;height:500px;background:#9333ea;top:-150px;right:-100px;"></div>
+
+    <p class="a eyebrow">Hype &amp; kudos</p>
+    <h2 class="a headline mt-16">People noticed<br>from <span class="c-purple">day one.</span></h2>
+    <div class="a hype-grid mt-28" style="margin-top:28px">
+      <img class="hype-img" src="https://www.figma.com/api/mcp/asset/9486d8f7-c41d-44fd-adad-77434252f8ca" alt="Julia Lowndes recognition" style="--rot:-1.5deg">
+      <img class="hype-img" src="https://www.figma.com/api/mcp/asset/1c5e8fd6-1646-4b0b-898f-a5d1fbf3b7ce" alt="Carys Pleace shoutout" style="--rot:1.2deg">
+      <img class="hype-img" src="https://www.figma.com/api/mcp/asset/f0f5cce5-f9e8-4784-b7ed-e5d2b0ea33b1" alt="Carys Pleace spotlight" style="--rot:-0.5deg">
+    </div>
+  </div>
+
+  <!-- ══ 14: Hype & kudos — workshop reactions ══ -->
+  <div class="slide sh2" id="s14">
+    <div class="orb" style="width:500px;height:500px;background:#0d9488;bottom:-150px;left:-100px;"></div>
+
+    <p class="a eyebrow">Hype &amp; kudos · March 20</p>
+    <h2 class="a headline mt-16">The workshop<br><span class="c-teal">spoke for itself.</span></h2>
+    <div class="a hype-grid mt-28" style="margin-top:28px">
+      <img class="hype-img" src="https://www.figma.com/api/mcp/asset/aba1eaea-08b2-46c6-a45e-fb06847848c0" alt="Beau Elder spotlight" style="--rot:1deg">
+      <img class="hype-img" src="https://www.figma.com/api/mcp/asset/96dedf1a-3793-4cad-a38b-ba275c1ab711" alt="Krissy Neuterman" style="--rot:-1.5deg">
+      <img class="hype-img" src="https://www.figma.com/api/mcp/asset/ef11fe28-beca-40fa-bb30-bb950b60e7c8" alt="CW Flannery" style="--rot:0.5deg">
+    </div>
+  </div>
+
+  <!-- ══ 15: Closing ══ -->
+  <div class="slide s15" id="s15">
     <div class="stars" id="stars-close"></div>
     <div class="orb" style="width:600px;height:600px;background:#1493ff;top:-200px;left:-150px;"></div>
     <div class="orb" style="width:400px;height:400px;background:#7c3aed;bottom:-100px;right:-100px;"></div>
@@ -686,7 +742,7 @@
 </div><!-- /stage -->
 
 <script>
-  const TOTAL = 14;
+  const TOTAL = 16;
   let cur = 0;
 
   /* ── Build star fields ── */
